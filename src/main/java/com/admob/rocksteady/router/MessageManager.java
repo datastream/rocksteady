@@ -169,7 +169,7 @@ public class MessageManager implements Service, Startable {
       mqChannel = mqConnection.createChannel();
       // Now we have connection
       //mqChannel.exchangeDelete(rabbitExchange);
-      mqChannel.exchangeDeclare(rabbitExchange, rabbitExchangeType, false, rabbitDurable, rabbitAutoDelete, null);
+      mqChannel.exchangeDeclare(rabbitExchange, rabbitExchangeType, rabbitDurable, rabbitAutoDelete, false, null);
 
       // Add a random string to queue name so each instance of rocksteady will
       // have its own queue
