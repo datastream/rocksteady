@@ -1,3 +1,5 @@
 .svn
 libs
 target
+.classpath
+.project
