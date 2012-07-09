@@ -9,7 +9,7 @@
   
   <bean class="com.admob.rocksteady.router.cep.StatementBean" id="ustoreAlerts">
     <constructor-arg value="SELECT name, colo, avg(value)  as value, app
-                          FROM Metric(app='ustore' and (name='request.50th' or name='request.99th')).std:groupby(colo,name).win:time_batch(${cepTimeBatchEverest} sec)
+                          FROM Metric(app='ustore' and (name='request.50th' or name='request.99th')).std:groupwin(colo,name).win:time_batch(${cepTimeBatchEverest} sec)
                           GROUP BY name, colo, app
                           HAVING ( name='request.50th' AND avg(value) > 10 ) OR
                           ( name='request.99th' AND avg(value) > 100 )                                                                                                    
@@ -52,7 +52,7 @@
 
   <bean class="com.admob.rocksteady.router.cep.StatementBean" id="metricAveraged">
   <constructor-arg value="SELECT name, colo, avg(value)  as value, retention, app
-                          FROM Metric(app='admixer' or app='ustore').std:groupby(colo,name,app).win:time_batch(${cepTimeBatchEverest} sec)
+                          FROM Metric(app='admixer' or app='ustore').std:groupwin(colo,name,app).win:time_batch(${cepTimeBatchEverest} sec)
                           GROUP BY name, colo, retention, app                                                                                                  
                           "/>
     <property name="listeners">
@@ -210,7 +210,7 @@
   </bean>  
   
   <bean class="com.admob.rocksteady.router.cep.StatementBean" id="deployDataWindow">
-  <constructor-arg value="CREATE WINDOW deployDataWindow.std:groupby(colo,hostname,app).win:length(1)    
+  <constructor-arg value="CREATE WINDOW deployDataWindow.std:groupwin(colo,hostname,app).win:length(1)    
                           as SELECT * from Deploy                                                                                                                   
                          "/>
   </bean>  
