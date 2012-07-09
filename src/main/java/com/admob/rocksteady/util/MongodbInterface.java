@@ -41,7 +41,7 @@ public class MongodbInterface {
     private final char[] passwd;
     private final String dbname;
 
-    private Mongo mongo;
+    private DBCollection coll;
 
     /**
      * The number of milliseconds between each stats update.
@@ -89,15 +89,20 @@ public class MongodbInterface {
     }
 
     private void connect() {
-	if (this.mongo == null) {
+	if (this.coll == null) {
 	    try {
-		this.mongo = new Mongo(this.mongodbServer, this.mongodbPort);
+		Mongo mongo = new Mongo(this.mongodbServer, this.mongodbPort);
+		DB db = mongo.getDB( this.dbname );
+		if(!db.authenticate(user, passwd)) {
+		    LOG.error("wrong passwd or user");
+		}
+		this.coll = db.getCollection("matrics");
 	    } catch (UnknownHostException e) {
 		LOG.error("cant connect Host" + e.toString());
-		this.mongo = null;
+		this.coll = null;
 	    } catch (MongoException e) {
 		LOG.error("mongodb connect error" + e.toString());
-		this.mongo = null;
+		this.coll = null;
 	    }
 	    LOG.trace("Connect Mongodb instance.");
 	}
@@ -124,27 +129,19 @@ public class MongodbInterface {
 		// Write the data as sequence of 1-byte characters. Can't just do
 		// our.writeUTF because
 		// it prefixes UTF encoding characters that we don't want.
-		if (this.mongo != null) {
-		    DB db = this.mongo.getDB( this.dbname );
-		    if(!db.authenticate(user, passwd)) {
-			LOG.error("wrong passwd or user");
-		    }
-		    DBCollection coll = db.getCollection("matrics");
-		    coll.insert(data);
+		if (this.coll != null) {
+		    this.coll.insert(data);
 		}
 		LOG.trace("Recorded statistics with Mongodb.");
 	    } catch (MongoException e) {
 		LOG.error("Problem sending statistics to Mongodb." + e.toString());
-		LOG.debug("Problem sending to Mongodb", e);
-		if (this.mongo != null) {
-		    this.mongo.close();
-		    this.mongo = null;
+		if (this.coll != null) {
+		    this.coll = null;
 		}
 	    } catch (Exception e) {
-		LOG.error("error", e.toString());
-		if (this.mongo != null) {
-		    this.mongo.close();
-		    this.mongo = null;
+		LOG.error("error" + e.toString());
+		if (this.coll != null) {
+		    this.coll = null;
 		}
 	    }
 	}
