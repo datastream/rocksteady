@@ -81,16 +81,15 @@ public class Mongodb implements UpdateListener {
           logger.error("Null string detected");
         }
 
-        logger.debug("graphite string:" + gs);
+        logger.debug("mogodb string:" + gs);
 
         // Send the data
         mongodbInterface.send(mongodbInterface.mongodbObject(gs, value));
 
       } catch (Exception e) {
-        // logger.error("Problem with sending metric to graphite: " +
-        // newEvent.toString());
+	  logger.error("Problem with sending metric to graphite: " +
+		       newEvent.toString());
       }
-
     }
   }
 
