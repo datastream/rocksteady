@@ -134,10 +134,17 @@ public class MongodbInterface {
 		}
 		LOG.trace("Recorded statistics with Mongodb.");
 	    } catch (MongoException e) {
-		LOG.warn("Problem sending statistics to Mongodb.  Will save the data and try again.");
+		LOG.error("Problem sending statistics to Mongodb." + e.toString());
 		LOG.debug("Problem sending to Mongodb", e);
 		if (this.mongo != null) {
 		    this.mongo.close();
+		    this.mongo = null;
+		}
+	    } catch (Exception e) {
+		LOG.error("error", e.toString());
+		if (this.mongo != null) {
+		    this.mongo.close();
+		    this.mongo = null;
 		}
 	    }
 	}
