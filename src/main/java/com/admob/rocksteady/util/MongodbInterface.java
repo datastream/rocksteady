@@ -98,10 +98,10 @@ public class MongodbInterface {
 		}
 		this.coll = db.getCollection("matrics");
 	    } catch (UnknownHostException e) {
-		LOG.error("cant connect Host" + e.toString());
+		LOG.error("cant connect Host " + e.toString());
 		this.coll = null;
 	    } catch (MongoException e) {
-		LOG.error("mongodb connect error" + e.toString());
+		LOG.error("mongodb connect error " + e.toString());
 		this.coll = null;
 	    }
 	    LOG.trace("Connect Mongodb instance.");
