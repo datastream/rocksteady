@@ -81,7 +81,7 @@ public class Mongodb implements UpdateListener {
 		retention = newEvent.get("retention").toString();
 		app = newEvent.get("app").toString();
 		// get name
-		if (cname != null) {
+		if (cname == null) {
 		    name = newEvent.get("name").toString();
 		} else {
 		    name = cname;
