@@ -76,7 +76,7 @@ public class MongodbInterface {
      *
      * @return A BasicDBObject that can be sent to the Mongodb collection.
      */
-    public BasicDBObject mongodbObject(String retention, String app, String name, String colo, String cluster, String hostname, String suffix, String value, String timestampstring) {
+    public BasicDBObject mongodbObject(String retention, String app, String name, String colo, String hostname, String suffix, String value, String timestampstring) {
 
 	// Current UNIX timestamp.
 	long timestamp;
@@ -91,7 +91,6 @@ public class MongodbInterface {
 	obj.put("app", app);
 	obj.put("name", name);
 	obj.put("colo", colo);
-	obj.put("cluster", cluster);
 	obj.put("suffix", suffix);
 	obj.put("value", value);
 	obj.put("timestamp", timestamp);

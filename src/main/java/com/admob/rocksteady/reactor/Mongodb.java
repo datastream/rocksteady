@@ -76,7 +76,6 @@ public class Mongodb implements UpdateListener {
 		String colo;
 		String value;
 		String hostname;
-		String cluster;
 		String timestamp;
 		retention = newEvent.get("retention").toString();
 		app = newEvent.get("app").toString();
@@ -86,34 +85,21 @@ public class Mongodb implements UpdateListener {
 		} else {
 		    name = cname;
 		}
-		colo = newEvent.get("colo").toString();
-		String[] splitName = colo.split("\\.");
-		if (splitName.length > 2) {
-		    StringBuffer sb = new StringBuffer();
-		    for (int i = 0; i < splitName.length-1; i++) {
-			if (sb.length() > 0) {
-			    sb.append(".");
-			}
-			sb.append(splitName[i]);
-		    }
-
-		    colo = sb.toString();
-		    cluster = splitName[splitName.length-1];
-		} else {
-		    cluster = new String("");
-		}
-
-		value = newEvent.get("value").toString();
-		try {
-		    timestamp = newEvent.get("timestamp").toString();
-		} catch (Exception e) {
-		    timestamp = null;
-		}
 
 		if ( (type != null) && (type.equals("uniq_host"))) {
 		    hostname = newEvent.get("hostname").toString();
 		} else {
 		    hostname = new String("");
+		}
+
+		colo = newEvent.get("colo").toString();
+
+		value = newEvent.get("value").toString();
+
+		try {
+		    timestamp = newEvent.get("timestamp").toString();
+		} catch (Exception e) {
+		    timestamp = null;
 		}
 
 		if (retention.isEmpty()) {
@@ -123,10 +109,10 @@ public class Mongodb implements UpdateListener {
 		    suffix = new String("");
 		}
 
-		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + "." + suffix + " " + value + " ");
+		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + hostname  + "." + suffix + " " + value + " ");
 
 		// Send the data
-		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, cluster, hostname, suffix, value, timestamp));
+		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, hostname, suffix, value, timestamp));
 	    } catch (Exception e) {
 		logger.error("Problem with sending metric to mongodb: " +
 			     e.toString());
