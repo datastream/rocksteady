@@ -76,13 +76,22 @@ public class MongodbInterface {
      *
      * @return A BasicDBObject that can be sent to the Mongodb collection.
      */
-    public BasicDBObject mongodbObject(String key, String value) {
+    public BasicDBObject mongodbObject(String retention, String app, String name, String colo, String cluster, String hostname, String value, String timestampstring) {
 
 	// Current UNIX timestamp.
-	long timestamp = new Date().getTime() / 1000; // seconds since midnight Jan
+	long timestamp;
+	if (timestampstring == null) {
+	    timestamp = new Date().getTime() / 1000; // seconds since midnight Jan
+	} else {
+	    timestamp = Long.parseLong(timestampstring);
+	}
 	// 1, 1970
 	BasicDBObject obj = new BasicDBObject();
-	obj.put("key", key);
+	obj.put("retention", retention);
+	obj.put("app", app);
+	obj.put("name", name);
+	obj.put("colo", colo);
+	obj.put("cluster", cluster);
 	obj.put("value", value);
 	obj.put("timestamp", timestamp);
 	return obj;

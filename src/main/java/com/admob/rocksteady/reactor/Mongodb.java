@@ -24,6 +24,7 @@ public class Mongodb implements UpdateListener {
 
     private String type;
     private String tag;
+    private String cname;
 
     private String suffix;
 
@@ -37,6 +38,10 @@ public class Mongodb implements UpdateListener {
 
     public void setTag(String tag) {
 	this.tag = tag;
+    }
+
+    public void setCname(String cname) {
+	this.cname = cname;
     }
 
     public String getTag() {
@@ -65,48 +70,63 @@ public class Mongodb implements UpdateListener {
 	}
 	for (EventBean newEvent : newEvents) {
 	    try {
-		String name = newEvent.get("name").toString();
-		String value = newEvent.get("value").toString();
-		String colo = newEvent.get("colo").toString();
-		String retention = newEvent.get("retention").toString();
-		String app = newEvent.get("app").toString();
-		String gs;
-
-		if (app.equals("cpu")) {
-		    String[] splitName = name.split("\\.");
+		String retention;
+		String app;
+		String name;
+		String colo;
+		String value;
+		String hostname;
+		String cluster;
+		String timestamp;
+		retention = newEvent.get("retention").toString();
+		app = newEvent.get("app").toString();
+		// get name
+		if (cname != null) {
+		    name = newEvent.get("name").toString();
+		} else {
+		    name = cname;
+		}
+		colo = newEvent.get("colo").toString();
+		String[] splitName = name.split("\\.");
+		if (splitName.length > 2) {
 		    StringBuffer sb = new StringBuffer();
-		    for (int i = 1; i < splitName.length; i++) {
+		    for (int i = 0; i < splitName.length-1; i++) {
 			if (sb.length() > 0) {
 			    sb.append(".");
 			}
 			sb.append(splitName[i]);
 		    }
-		    name = sb.toString();
-		}
-		if ( (type != null) && (type.equals("uniq_host"))) {
-		    String hostname = newEvent.get("hostname").toString();
-		    gs = app + "." + name + "." + colo + "." + hostname;
+
+		    colo = sb.toString();
+		    cluster = splitName[splitName.length-1];
 		} else {
-		    gs = app + "." + name + "." + colo;
+		    cluster = new String("");
 		}
 
-		if (!retention.isEmpty()) {
-		    gs = retention + "." + gs;
+		value = newEvent.get("value").toString();
+		try {
+		    timestamp = newEvent.get("timestamp").toString();
+		} catch (Exception e) {
+		    timestamp = null;
 		}
 
-		if ((suffix != null)&&(suffix.length() != 0)) {
-		    gs = gs + "." + suffix;
+		if ( (type != null) && (type.equals("uniq_host"))) {
+		    hostname = newEvent.get("hostname").toString();
+		} else {
+		    hostname = new String("");
 		}
 
-		if (gs == null) {
-		    logger.error("Null string detected");
+		if (retention.isEmpty()) {
+		    retention = new String("");
+		}
+		if (suffix != null) {
+		    colo += suffix;
 		}
 
-		logger.debug("mogodb string: " + gs + value);
+		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + " " + value + " " + timestamp);
 
 		// Send the data
-		mongodbInterface.send(mongodbInterface.mongodbObject(gs, value));
-
+		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, cluster, hostname, value, timestamp));
 	    } catch (Exception e) {
 		logger.error("Problem with sending metric to mongodb: " +
 			     e.toString());
