@@ -105,7 +105,7 @@ public class MongodbInterface {
 		if(!db.authenticate(user, passwd)) {
 		    LOG.error("wrong passwd or user");
 		}
-		this.coll = db.getCollection("matrics");
+		this.coll = db.getCollection("metrics");
 	    } catch (UnknownHostException e) {
 		LOG.error("cant connect Host " + e.toString());
 		this.coll = null;
