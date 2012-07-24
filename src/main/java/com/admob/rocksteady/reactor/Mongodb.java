@@ -123,7 +123,7 @@ public class Mongodb implements UpdateListener {
 		    suffix = new String("");
 		}
 
-		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + "." + suffix + " " + value + " " + timestamp);
+		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + "." + suffix + " " + value + " ");
 
 		// Send the data
 		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, cluster, hostname, suffix, value, timestamp));
