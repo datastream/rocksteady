@@ -84,7 +84,7 @@ public class MongodbInterface {
 	    try {
 		timestamp = Long.parseLong(timestampstring);
 	    } catch (Exception e) {
-		LOG.error("timestamp error: " + e.toString());
+		LOG.error("timestamp error: " + timestampstring + ":" + e.toString());
 	    }
 	}
 	timestamp = new Date().getTime() / 1000; // seconds since midnight Jan

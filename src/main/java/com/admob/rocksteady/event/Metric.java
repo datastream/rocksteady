@@ -33,7 +33,7 @@ public class Metric {
   private String original;
   private String name;
   private Double value;
-  private Double timestamp;
+  private long timestamp;
   private String retention = "";
   private String colo = "";
   private String hostname = "";
@@ -79,7 +79,7 @@ public class Metric {
 
       this.name = sb.toString();
       this.value = new Double(splitString[1]);
-      this.timestamp = new Double(splitString[2]);
+      this.timestamp = Long.parseLong(splitString[2]);
       // logger.info("metric found: " + name);
 
       // Only send event if everything is cool
@@ -115,11 +115,11 @@ public class Metric {
     this.value = value;
   }
 
-  public Double getTimestamp() {
+  public long getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(Double timestamp) {
+  public void setTimestamp(long timestamp) {
     this.timestamp = timestamp;
   }
 

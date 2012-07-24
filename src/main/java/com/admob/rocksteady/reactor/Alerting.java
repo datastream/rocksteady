@@ -149,7 +149,7 @@ public class Alerting implements UpdateListener {
           Metric w = (Metric) newEvent.get("win");
           String name = w.getName();
           String value = w.getValue().toString();
-          String ts = w.getTimestamp().toString();
+          String ts = String.valueOf(w.getTimestamp());
           String colo = w.getColo();
           String hostname = w.getHostname();
           String app = w.getApp();
