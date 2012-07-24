@@ -87,7 +87,7 @@ public class Mongodb implements UpdateListener {
 		    name = cname;
 		}
 		colo = newEvent.get("colo").toString();
-		String[] splitName = name.split("\\.");
+		String[] splitName = colo.split("\\.");
 		if (splitName.length > 2) {
 		    StringBuffer sb = new StringBuffer();
 		    for (int i = 0; i < splitName.length-1; i++) {
