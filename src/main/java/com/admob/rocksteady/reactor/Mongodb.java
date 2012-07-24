@@ -119,14 +119,14 @@ public class Mongodb implements UpdateListener {
 		if (retention.isEmpty()) {
 		    retention = new String("");
 		}
-		if (suffix != null) {
-		    colo += suffix;
+		if (suffix == null) {
+		    suffix = new String("");
 		}
 
-		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + " " + value + " " + timestamp);
+		logger.debug("mogodb string: " + retention + "." + app + "." + name + "." + colo + "." + cluster + "." + hostname  + "." + suffix + " " + value + " " + timestamp);
 
 		// Send the data
-		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, cluster, hostname, value, timestamp));
+		mongodbInterface.send(mongodbInterface.mongodbObject(retention, app, name, colo, cluster, hostname, suffix, value, timestamp));
 	    } catch (Exception e) {
 		logger.error("Problem with sending metric to mongodb: " +
 			     e.toString());
