@@ -83,7 +83,7 @@ public class Mongodb implements UpdateListener {
 		if (cname == null) {
 		    name = newEvent.get("name").toString();
 		} else {
-		    name = cname;
+		    name = new String(cname);
 		}
 
 		if ( (type != null) && (type.equals("uniq_host"))) {
