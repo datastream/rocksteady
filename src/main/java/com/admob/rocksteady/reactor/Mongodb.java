@@ -24,7 +24,6 @@ public class Mongodb implements UpdateListener {
 
     private String type;
     private String tag;
-    private String cname;
 
     private String suffix;
 
@@ -38,10 +37,6 @@ public class Mongodb implements UpdateListener {
 
     public void setTag(String tag) {
 	this.tag = tag;
-    }
-
-    public void setCname(String cname) {
-	this.cname = cname;
     }
 
     public String getTag() {
@@ -69,26 +64,26 @@ public class Mongodb implements UpdateListener {
 	    return;
 	}
 	for (EventBean newEvent : newEvents) {
+	    String retention;
+	    String app;
+	    String name;
+	    String colo;
+	    String value;
+	    String hostname;
+	    String timestamp;
 	    try {
-		String retention;
-		String app;
-		String name;
-		String colo;
-		String value;
-		String hostname;
-		String timestamp;
 		retention = newEvent.get("retention").toString();
 		app = newEvent.get("app").toString();
 		// get name
-		if (cname == null) {
+		if (type == null) {
 		    name = newEvent.get("name").toString();
 		} else {
-		    name = new String(cname);
+		    name = new String(type);
 		}
 
-		if ( (type != null) && (type.equals("uniq_host"))) {
+		try {
 		    hostname = newEvent.get("hostname").toString();
-		} else {
+		} catch (Exception e) {
 		    hostname = new String("");
 		}
 
