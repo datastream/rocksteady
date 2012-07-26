@@ -94,7 +94,7 @@ public class Mongodb implements UpdateListener {
 		try {
 		    timestamp = newEvent.get("timestamp").toString();
 		} catch (Exception e) {
-		    timestamp = null;
+		    timestamp = "";
 		}
 
 		if (retention.isEmpty()) {

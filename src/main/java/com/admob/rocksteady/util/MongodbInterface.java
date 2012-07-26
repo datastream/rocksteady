@@ -80,14 +80,16 @@ public class MongodbInterface {
 
 	// Current UNIX timestamp.
 	long timestamp;
-	if (timestampstring != null) {
+	if (timestampstring != "") {
 	    try {
 		timestamp = Long.parseLong(timestampstring);
 	    } catch (Exception e) {
 		LOG.error("timestamp error: " + timestampstring + ":" + e.toString());
+		timestamp = new Date().getTime() / 1000; // seconds since midnight Jan
 	    }
+	} else {
+	    timestamp = new Date().getTime() / 1000; // seconds since midnight Jan
 	}
-	timestamp = new Date().getTime() / 1000; // seconds since midnight Jan
 	// 1, 1970
 	BasicDBObject obj = new BasicDBObject();
 	obj.put("retention", retention);
