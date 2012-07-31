@@ -45,6 +45,7 @@ public class MessageManager implements Service, Startable {
   private String rabbitExchange;
   private String rabbitExchangeLog;
   private String rabbitQueue;
+  private String token;
   private boolean rabbitDurable;
   private String rabbitExchangeType;
   private String rabbitRoutingKey;
@@ -174,7 +175,9 @@ public class MessageManager implements Service, Startable {
       // Add a random string to queue name so each instance of rocksteady will
       // have its own queue
       Random r = new Random();
-      String token = Long.toString(Math.abs(r.nextLong()), 36);
+      if (token == null) {
+	  token = Long.toString(Math.abs(r.nextLong()), 36);
+      }
 
       this.setRabbitQueue("rocksteady" + "-" + token);
 
@@ -229,6 +232,14 @@ public class MessageManager implements Service, Startable {
 
   public String getRabbitQueue() {
     return rabbitQueue;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public String getToken() {
+    return token;
   }
 
   public boolean isRabbitDurable() {

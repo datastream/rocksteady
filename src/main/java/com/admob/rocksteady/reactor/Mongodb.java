@@ -97,7 +97,7 @@ public class Mongodb implements UpdateListener {
 		    timestamp = "";
 		}
 
-		if (retention.isEmpty()) {
+		if (retention.isEmpty() || (retention == null)) {
 		    retention = new String("");
 		}
 		if (suffix == null) {
