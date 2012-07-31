@@ -130,9 +130,6 @@ public class MongodbInterface {
      */
     public void send(BasicDBObject input) {
 	LOG.trace("Going to record statistics with Mongodb.");
-	BasicDBObject data;
-
-	data = input;
 
 	if (enableSend) {
 	    // Write the data to the socket.
@@ -144,7 +141,7 @@ public class MongodbInterface {
 		// our.writeUTF because
 		// it prefixes UTF encoding characters that we don't want.
 		if (this.coll != null) {
-		    this.coll.insert(data);
+		    this.coll.insert(input);
 		}
 		LOG.trace("Recorded statistics with Mongodb.");
 	    } catch (MongoException e) {
