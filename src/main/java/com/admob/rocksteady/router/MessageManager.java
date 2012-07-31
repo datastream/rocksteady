@@ -104,6 +104,14 @@ public class MessageManager implements Service, Startable {
   @Override
   public void start() {
 
+    // Add a random string to queue name so each instance of rocksteady will
+    // have its own queue
+    Random r = new Random();
+    if (token == null) {
+      token = Long.toString(Math.abs(r.nextLong()), 36);
+    }
+    this.setRabbitQueue(rabbitQueue + "-" + token);
+
     connectRabbit();
 
     QueueingConsumer.Delivery delivery;
@@ -171,15 +179,6 @@ public class MessageManager implements Service, Startable {
       // Now we have connection
       //mqChannel.exchangeDelete(rabbitExchange);
       mqChannel.exchangeDeclare(rabbitExchange, rabbitExchangeType, rabbitDurable, rabbitAutoDelete, false, null);
-
-      // Add a random string to queue name so each instance of rocksteady will
-      // have its own queue
-      Random r = new Random();
-      if (token == null) {
-	  token = Long.toString(Math.abs(r.nextLong()), 36);
-      }
-
-      this.setRabbitQueue(rabbitQueue + "-" + token);
 
       logger.info("Connected to MQ with queue: " + this.getRabbitQueue());
 
