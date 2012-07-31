@@ -179,19 +179,19 @@ public class MessageManager implements Service, Startable {
 	  token = Long.toString(Math.abs(r.nextLong()), 36);
       }
 
-      this.setRabbitQueue("rocksteady" + "-" + token);
+      this.setRabbitQueue(rabbitQueue + "-" + token);
 
       logger.info("Connected to MQ with queue: " + this.getRabbitQueue());
 
 
       // Create queue, passive = true, Durable setup externally, exclusive =
       // false, AutoDelete externally.
-      mqChannel.queueDeclare(rabbitQueue, false, rabbitDurable, false, rabbitAutoDelete, null);
-      mqChannel.queueBind(rabbitQueue, rabbitExchange, rabbitRoutingKey);
+      mqChannel.queueDeclare(this.rabbitQueue, false, rabbitDurable, false, rabbitAutoDelete, null);
+      mqChannel.queueBind(this.rabbitQueue, rabbitExchange, rabbitRoutingKey);
       // mqChannel.queueBind(rabbitQueue, rabbitExchangeLog, rabbitRoutingKey);
 
       mqConsumer = new QueueingConsumer(mqChannel);
-      mqChannel.basicConsume(rabbitQueue, QueuingNoAck, mqConsumer);
+      mqChannel.basicConsume(this.rabbitQueue, QueuingNoAck, mqConsumer);
 
     } catch (IOException e) {
       // Something's wrong
